@@ -1,0 +1,36 @@
+Private Sub Workbook_SheetBeforeDoubleClick(ByVal Sh As Object, ByVal Target As Range, Cancel As Boolean)
+
+Dim FindString As String
+Dim Rnd As Range
+
+FindString = ActiveCell.Value
+
+Sheets("Sheet2").Select
+
+    If Trim(FindString) <> "" Then
+        With Sheets("Sheet2").Range("P:P")
+            Set Rng = .Find(What:=FindString, _
+                            After:=.Cells(.Cells.Count), _
+                            LookIn:=xlValues, _
+                            LookAt:=xlWhole, _
+                            SearchOrder:=xlByRows, _
+                            SearchDirection:=xlNext, _
+                            MatchCase:=False)
+            If Not Rng Is Nothing Then
+                Application.Goto Rng, True
+                ActiveCell.Offset(0, -1).Select
+                ActiveCell.Copy
+                
+                Sheets("Sheet1").Select
+                ActiveCell.Offset(0, 1).Select
+                ActiveSheet.Paste
+                
+            Else
+                MsgBox "Nothing found"
+            End If
+        End With
+    End If
+
+
+
+End Sub
